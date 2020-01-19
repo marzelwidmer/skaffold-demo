@@ -8,11 +8,11 @@
 		<version>2.2.3.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example</groupId>
-	<artifactId>demo</artifactId>
+	<groupId>ch.keepcalm.demo</groupId>
+	<artifactId>skaffold-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<description>Demo project for Skaffold</description>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -20,7 +20,6 @@
 		<spring-cloud.version>Hoxton.SR1</spring-cloud.version>
 		<graceful-shutdown.version>2.0.1</graceful-shutdown.version>
 		<jib.version>1.8.0</jib.version>
-
 	</properties>
 
 	<dependencies>

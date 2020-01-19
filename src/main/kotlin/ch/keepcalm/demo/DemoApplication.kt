@@ -1,4 +1,4 @@
-package com.example.demo
+package ch.keepcalm.demo
 
 import ch.sbb.esta.openshift.gracefullshutdown.GracefulshutdownSpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication

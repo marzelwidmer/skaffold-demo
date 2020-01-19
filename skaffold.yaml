@@ -3,15 +3,37 @@ kind: Config
 metadata:
   name: demo
 build:
+  tagPolicy:
+    sha256: {}
   insecureRegistries:
     - registry.apps.c3smonkey.ch
   artifacts:
     - image: registry.apps.c3smonkey.ch/myproject/demo
-#    - image: docker-registry.default.svc:5000/myproject/demo
       jib:
         args: ['-DskipTests' , '-Dimage=registry.apps.c3smonkey.ch/myproject/demo']
 deploy:
   kubectl:
     manifests:
-    - k8s/deployment.yaml
+    - k8s/*.yaml
 
+profiles:
+  - name: minikube
+    activation:
+      - kubeContext: myproject/192-168-99-101:8443/developer
+    build:
+      insecureRegistries:
+        - docker-registry-default.192.168.99.101.nip.io
+      tagPolicy:
+        sha256: {}
+#        gitCommit: {}
+      local:
+        push: false
+      artifacts:
+#        - image: demo
+        - image: docker-registry-default.192.168.99.101.nip.io/myproject/demo
+          jib:
+            args: ['-DskipTests' , '-Dimage=docker-registry-default.192.168.99.101.nip.io/myproject/demo']
+    deploy:
+      kubectl:
+        manifests:
+          - k8s/minishift-deployment.yaml
