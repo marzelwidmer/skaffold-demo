@@ -1,0 +1,88 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo
+  name: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+        - image: docker-registry.default.svc:5000/myhelsana-build/demo
+          name: demo
+          imagePullPolicy: Always
+#          resources:
+#            requests:
+#              memory: 256M
+#              cpu: 2000m
+#            limits:
+#              memory: 512M
+#              cpu: 4000m
+          livenessProbe:
+            httpGet:
+              port: 8080
+              path: /alive
+          readinessProbe:
+            periodSeconds: 5
+            failureThreshold: 1
+            httpGet:
+              port: 8080
+              path: /actuator/health
+
+
+
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: demo
+  name: demo
+spec:
+  ports:
+    - name: 8080-8080
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: demo
+  type: ClusterIP
+
+
+
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  labels:
+    app: demo
+  name: demo
+  namespace: myhelsana-build
+spec:
+  host:  demo-myhelsana-build.osp-appl-preprod.hel.kko.ch
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: demo
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+    - conditions:
+      host: demo-myhelsana-build.osp-appl-preprod.hel.kko.ch
+      routerName: router
+      wildcardPolicy: None

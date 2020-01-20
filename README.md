@@ -55,3 +55,21 @@ oc apply -f k8s/minishift-deployment.yaml
 ```bash
 oc delete all --all
 ```
+
+
+
+
+
+
+
+docker login -u <user> -p `oc whoami -t` registry.osp-appl-preprod.hel.kko.ch
+skaffold run -p osp
+
+
+
+
+
+
+
+
+

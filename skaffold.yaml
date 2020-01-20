@@ -37,3 +37,22 @@ profiles:
       kubectl:
         manifests:
           - k8s/minishift-deployment.yaml
+
+  - name: osp
+    activation:
+      - kubeContext: HKESQ
+    build:
+      insecureRegistries:
+        - registry.osp-appl-preprod.hel.kko.ch
+      tagPolicy:
+        sha256: {}
+#        gitCommit: {}
+      artifacts:
+#        - image: demo
+        - image: registry.osp-appl-preprod.hel.kko.ch/myhelsana-build/demo
+          jib:
+            args: ['-DskipTests' , '-Dimage=registry.osp-appl-preprod.hel.kko.ch/myhelsana-build/demo', '-Posp']
+    deploy:
+      kubectl:
+        manifests:
+          - k8s/osp-deployment.yaml
