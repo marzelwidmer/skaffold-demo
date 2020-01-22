@@ -1,0 +1,99 @@
+apiVersion: v1
+data:
+  application.yaml: |-
+    opentracing:
+      jaeger:
+        http-sender:
+          url: http://jaeger-collector-jaeger.apps.c3smonkey.ch/api/traces
+kind: ConfigMap
+metadata:
+  labels:
+    stage: dev
+  name: demo-6cbc58m5t2
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: demo
+    stage: dev
+  name: demo
+spec:
+  ports:
+  - name: 8080-8080
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: demo
+    stage: dev
+  type: ClusterIP
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: demo
+    stage: dev
+  name: demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: demo
+      stage: dev
+  template:
+    metadata:
+      labels:
+        app: demo
+        stage: dev
+    spec:
+      containers:
+      - image: docker-registry.default.svc:5000/myproject/demo
+        imagePullPolicy: Always
+        livenessProbe:
+          httpGet:
+            path: /alive
+            port: 8080
+        name: demo
+        readinessProbe:
+          failureThreshold: 1
+          httpGet:
+            path: /actuator/health
+            port: 8080
+          periodSeconds: 5
+        resources:
+          limits:
+            cpu: 4000m
+            memory: 512M
+          requests:
+            cpu: 2000m
+            memory: 256M
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  labels:
+    app: demo
+    stage: dev
+  name: demo
+  namespace: myproject
+spec:
+  host: demo.apps.c3smonkey.ch
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: demo
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+  - conditions: null
+    host: demo.apps.c3smonkey.ch
+    routerName: router
+    wildcardPolicy: None

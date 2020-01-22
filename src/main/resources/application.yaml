@@ -1,0 +1,4 @@
+opentracing:
+  jaeger:
+    http-sender:
+      url: http://jaeger-collector-jaeger.apps.c3smonkey.ch/api/traces

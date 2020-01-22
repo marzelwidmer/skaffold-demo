@@ -71,5 +71,10 @@ skaffold run -p osp
 
 
 
+# Kustomize
+
+```bash
+kustomize build  > ./service.yaml
+```
 
 

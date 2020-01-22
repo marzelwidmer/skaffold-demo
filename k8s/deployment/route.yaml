@@ -1,0 +1,26 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+  labels:
+    app: demo
+  name: demo
+  namespace: myproject
+spec:
+  host:  demo.apps.c3smonkey.ch
+  port:
+    targetPort: 8080
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: demo
+    weight: 100
+  wildcardPolicy: None
+status:
+  ingress:
+    - conditions:
+      host: demo.apps.c3smonkey.ch
+      routerName: router
+      wildcardPolicy: None
