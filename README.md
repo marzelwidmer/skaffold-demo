@@ -58,12 +58,10 @@ oc delete all --all
 
 
 
-
-
-
-
+```bash
 docker login -u <user> -p `oc whoami -t` registry.osp-appl-preprod.hel.kko.ch
 skaffold run -p osp
+```
 
 
 
@@ -72,9 +70,8 @@ skaffold run -p osp
 
 
 # Kustomize
-
 ```bash
-kustomize build  > ./service.yaml
+kustomize build k8s/deployment > k8s/service.yaml
 ```
 
 

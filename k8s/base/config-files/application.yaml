@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: skaffold-demo
+  cloud:
+    kubernetes:
+      reload:
+        enabled: true
+        strategy: restart_context
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    restart:
+      enabled: true
+
+ribbon:
+  http:
+    client:
+      enabled: true
