@@ -5,7 +5,7 @@ bases:
   - ../base
 
 commonLabels:
-    stage: dev
+    env: dev
 
 commonAnnotations:
   component: fsl-backend
